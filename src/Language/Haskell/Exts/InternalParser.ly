@@ -892,14 +892,14 @@ Pragmas
 >       : varid                             { RuleVar (ann $1) $1 }
 >       | '(' varid '::' truectype ')'      { TypedRuleVar ($1 <^^> $5 <** [$1,$3,$5]) $2 $4 }
 
-> warndeprs :: { ([([Name L],String)],[S]) }
+> warndeprs :: { ([(String,[Name L])],[S]) }
 >   : warndeprs ';' warndepr            { (fst $3 : fst $1, snd $1 ++ ($2:snd $3)) }
 >   | warndeprs ';'                     { (fst $1, snd $1 ++ [$2]) }
 >   | warndepr                          { ([fst $1],snd $1) }
 >   | {- empty -}                       { ([],[]) }
 
-> warndepr :: { (([Name L], String),[S]) }
->       : namevars STRING               { let Loc l (StringTok (s,_)) = $2 in ((fst $1,s),snd $1 ++ [l]) }
+> warndepr :: { ((String, [Name L]),[S]) }
+>       : namevars STRING               { let Loc l (StringTok (s,_)) = $2 in ((s,fst $1),snd $1 ++ [l]) }
 
 > namevars :: { ([Name L],[S]) }
 >           : namevar                   { ([$1],[]) }

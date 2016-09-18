@@ -700,8 +700,8 @@ instance  Pretty (CallConv l) where
         pretty CApi {}       = text "capi"
 
 ------------------------- Pragmas ---------------------------------------
-ppWarnDepr :: ([Name l], String) -> Doc
-ppWarnDepr (names, txt) = mySep $ punctuate comma (map pretty names) ++ [text $ show txt]
+ppWarnDepr :: (String, [Name l]) -> Doc
+ppWarnDepr (txt, names) = mySep $ punctuate comma (map pretty names) ++ [text $ show txt]
 
 instance  Pretty (Rule l) where
         pretty (Rule _ tag activ rvs rhs lhs) =

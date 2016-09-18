@@ -312,9 +312,9 @@ data Decl l
      -- ^ A foreign export declaration
      | RulePragmaDecl   l [Rule l]
      -- ^ A RULES pragma
-     | DeprPragmaDecl   l [([Name l], String)]
+     | DeprPragmaDecl   l [(String, [Name l])]
      -- ^ A DEPRECATED pragma
-     | WarnPragmaDecl   l [([Name l], String)]
+     | WarnPragmaDecl   l [(String, [Name l])]
      -- ^ A WARNING pragma
      | InlineSig        l Bool (Maybe (Activation l)) (QName l)
      -- ^ An INLINE pragma

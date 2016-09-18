@@ -937,10 +937,10 @@ instance ExactP BooleanFormula where
                 [a'',b''] -> printStringAt (pos a'') "(" >> exactPC b >> printStringAt (pos b'') ")"
                 _ -> errorEP "ExactP: BooleanFormula: ParenFormula is given wrong number of srcInfoPoints"
 
-printWarndeprs :: [Pos] -> [([Name SrcSpanInfo], String)] -> EP ()
+printWarndeprs :: [Pos] -> [(String, [Name SrcSpanInfo])] -> EP ()
 printWarndeprs _ [] = return ()
-printWarndeprs ps' ((ns',str'):nsts') = printWd ps' ns' str' nsts'
-  where printWd :: [Pos] -> [Name SrcSpanInfo] -> String -> [([Name SrcSpanInfo], String)] -> EP ()
+printWarndeprs ps' ((str',ns'):nsts') = printWd ps' ns' str' nsts'
+  where printWd :: [Pos] -> [Name SrcSpanInfo] -> String -> [(String, [Name SrcSpanInfo])] -> EP ()
         printWd (p:ps) []  str nsts = printStringAt p (show str) >> printWarndeprs ps nsts
         printWd ps     [n] str nsts = exactPC n >> printWd ps [] str nsts
         printWd (p:ps) (n:ns) str nsts = exactPC n >> printStringAt p "," >> printWd ps ns str nsts
