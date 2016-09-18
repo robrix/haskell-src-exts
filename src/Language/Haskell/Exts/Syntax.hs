@@ -1302,6 +1302,16 @@ instance Annotated Decl where
         RoleAnnotDecl    l t rs          -> RoleAnnotDecl (f l) t rs
         PatSyn           l p r d         -> PatSyn (f l) p r d
 
+instance Annotated PatternSynDirection where
+  ann r = case r of
+    Unidirectional l -> l
+    ImplicitBidirectional l -> l
+    ExplicitBidirectional l _ -> l
+  amap f r = case r of
+    Unidirectional l -> Unidirectional (f l)
+    ImplicitBidirectional l -> ImplicitBidirectional (f l)
+    ExplicitBidirectional l t -> ExplicitBidirectional (f l) t
+
 instance Annotated Role where
     ann r = case r of
       RoleWildcard l -> l
