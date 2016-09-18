@@ -117,7 +117,7 @@ module Language.Haskell.Exts.Syntax (
 import Prelude hiding (id)
 
 import Data.Data
-import GHC.Generics (Generic)
+import GHC.Generics (Generic,Generic1)
 #if __GLASGOW_HASKELL__ < 710
 import Data.Foldable (Foldable)
 import Data.Traversable (Traversable)
@@ -125,7 +125,7 @@ import Data.Traversable (Traversable)
 
 -- | The name of a Haskell module.
 data ModuleName l = ModuleName l String
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Constructors with special syntax.
 -- These names are never qualified, and always refer to builtin type or
@@ -138,7 +138,7 @@ data SpecialCon l
                             --   constructors @(,)@ etc, possibly boxed @(\#,\#)@
     | Cons l                -- ^ list data constructor @(:)@
     | UnboxedSingleCon l    -- ^ unboxed singleton tuple constructor @(\# \#)@
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | This type is used to represent qualified variables, and also
 -- qualified constructors.
@@ -146,38 +146,38 @@ data QName l
     = Qual    l (ModuleName l) (Name l) -- ^ name qualified with a module name
     | UnQual  l                (Name l) -- ^ unqualified local name
     | Special l (SpecialCon l)          -- ^ built-in constructor with special syntax
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | This type is used to represent variables, and also constructors.
 data Name l
     = Ident  l String   -- ^ /varid/ or /conid/.
     | Symbol l String   -- ^ /varsym/ or /consym/
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An implicit parameter name.
 data IPName l
     = IPDup l String -- ^ ?/ident/, non-linear implicit parameter
     | IPLin l String -- ^ %/ident/, linear implicit parameter
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Possibly qualified infix operators (/qop/), appearing in expressions.
 data QOp l
     = QVarOp l (QName l) -- ^ variable operator (/qvarop/)
     | QConOp l (QName l) -- ^ constructor operator (/qconop/)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Operators appearing in @infix@ declarations are never qualified.
 data Op l
     = VarOp l (Name l)    -- ^ variable operator (/varop/)
     | ConOp l (Name l)    -- ^ constructor operator (/conop/)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A name (/cname/) of a component of a class or data type in an @import@
 -- or export specification.
 data CName l
     = VarName l (Name l) -- ^ name of a method or field
     | ConName l (Name l) -- ^ name of a data constructor
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A complete Haskell source module.
 data Module l
@@ -189,16 +189,16 @@ data Module l
     | XmlHybrid l (Maybe (ModuleHead l)) [ModulePragma l] [ImportDecl l] [Decl l]
                 (XName l) [XAttr l] (Maybe (Exp l)) [Exp l]
     -- ^ a hybrid module combining an XML document with an ordinary module
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The head of a module, including the name and export specification.
 data ModuleHead l = ModuleHead l (ModuleName l) (Maybe (WarningText l)) (Maybe (ExportSpecList l))
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An explicit export specification.
 data ExportSpecList l
     = ExportSpecList l [ExportSpec l]
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An item in a module's export specification.
 data ExportSpec l
@@ -211,15 +211,15 @@ data ExportSpec l
                                         --   a datatype exported with some of its constructors.
      | EModuleContents l (ModuleName l) -- ^ @module M@:
                                         --   re-export a module.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Indicates the position of the wildcard in an export list
 data EWildcard l = NoWildcard l | EWildcard l Int
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Namespaces for imports/exports.
 data Namespace l = NoNamespace l | TypeNamespace l | PatternNamespace l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An import declaration.
 data ImportDecl l = ImportDecl
@@ -233,7 +233,7 @@ data ImportDecl l = ImportDecl
     , importSpecs :: Maybe (ImportSpecList l)
             -- ^ optional list of import specifications.
     }
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An explicit import specification list.
 data ImportSpecList l
@@ -241,7 +241,7 @@ data ImportSpecList l
             -- A list of import specifications.
             -- The 'Bool' is 'True' if the names are excluded
             -- by @hiding@.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An import specification, representing a single explicit item imported
 --   (or hidden) from a module.
@@ -255,14 +255,14 @@ data ImportSpec l
      | IThingWith l (Name l) [CName l]  -- ^ @T(C_1,...,C_n)@:
                                         --   a class imported with some of its methods, or
                                         --   a datatype imported with some of its constructors.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Associativity of an operator.
 data Assoc l
      = AssocNone  l -- ^ non-associative operator (declared with @infix@)
      | AssocLeft  l -- ^ left-associative operator (declared with @infixl@).
      | AssocRight l -- ^ right-associative operator (declared with @infixr@)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A top-level declaration.
 data Decl l
@@ -332,16 +332,16 @@ data Decl l
      -- ^ A MINIMAL pragma
      | RoleAnnotDecl    l (QName l) [Role l]
      -- ^ A role annotation
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 data  PatternSynDirection l =
       Unidirectional -- ^ A unidirectional pattern synonym with "<-"
     | ImplicitBidirectional  -- ^ A bidirectional pattern synonym with "="
     | ExplicitBidirectional l [Decl l]  -- ^ A birectional pattern synonym with the construction specified.
-    deriving (Eq, Ord, Show, Data, Typeable, Foldable, Traversable, Functor, Generic)
+    deriving (Eq, Ord, Show, Data, Typeable, Foldable, Traversable, Functor, Generic,Generic1)
 
 -- | A type equation as found in closed type families.
-data TypeEqn l = TypeEqn l (Type l) (Type l) deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+data TypeEqn l = TypeEqn l (Type l) (Type l) deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An annotation through an ANN pragma.
 data Annotation l
@@ -351,7 +351,7 @@ data Annotation l
     -- ^ An annotation for a declared type.
     | ModuleAnn l           (Exp l)
     -- ^ An annotation for the defining module.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A boolean formula for MINIMAL pragmas.
 data BooleanFormula l
@@ -359,26 +359,26 @@ data BooleanFormula l
     | AndFormula l [BooleanFormula l]    -- ^ And boolean formulas.
     | OrFormula l [BooleanFormula l]     -- ^ Or boolean formulas.
     | ParenFormula l (BooleanFormula l)  -- ^ Parenthesized boolean formulas.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 data Role l
   = Nominal l
   | Representational l
   | Phantom l
   | RoleWildcard l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A flag stating whether a declaration is a data or newtype declaration.
 data DataOrNew l = DataType l | NewType l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 
 -- | Injectivity info for injective type families
 data InjectivityInfo l = InjectivityInfo l (Name l) [Name l]
-  deriving (Eq, Ord, Show, Typeable, Data, Foldable, Traversable, Functor, Generic)
+  deriving (Eq, Ord, Show, Typeable, Data, Foldable, Traversable, Functor, Generic,Generic1)
 
 data ResultSig l = KindSig l (Kind l) | TyVarSig l (TyVarBind l)
-  deriving (Eq, Ord, Show, Typeable, Data, Foldable, Traversable, Functor, Generic)
+  deriving (Eq, Ord, Show, Typeable, Data, Foldable, Traversable, Functor, Generic,Generic1)
 
 -- | The head of a type or class declaration, which consists of the type
 -- or class name applied to some type variables
@@ -409,7 +409,7 @@ data DeclHead l
     | DHInfix l (TyVarBind l) (Name l) -- ^ infix application of the type/class name to the left operand
     | DHParen l (DeclHead l) -- ^ parenthesized declaration head
     | DHApp   l (DeclHead l) (TyVarBind l) -- ^ application to one more type variable
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The instance declaration rule, which is, roughly, the part of the instance declaration before the @where@ keyword.
 --
@@ -443,7 +443,7 @@ data DeclHead l
 data InstRule l
     = IRule l (Maybe [TyVarBind l]) (Maybe (Context l)) (InstHead l)
     | IParen l (InstRule l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- See bugs #7 and #31 for more details and use cases for the rationale
 -- of the split. DeclOrInstHead should be used by DeclHead as the name implies.
@@ -472,21 +472,21 @@ data InstHead l
     | IHInfix l (Type l) (QName l) -- ^ infix application of the type/class name to the left operand
     | IHParen l (InstHead l) -- ^ parenthesized instance head
     | IHApp   l (InstHead l) (Type l) -- ^ application to one more type
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A deriving clause following a data type declaration.
 data Deriving l = Deriving l [InstRule l]
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A binding group inside a @let@ or @where@ clause.
 data Binds l
     = BDecls  l [Decl l]     -- ^ An ordinary binding group
     | IPBinds l [IPBind l]   -- ^ A binding group for implicit parameters
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A binding of an implicit parameter.
 data IPBind l = IPBind l (IPName l) (Exp l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Clauses of a function binding.
 data Match l
@@ -500,7 +500,7 @@ data Match l
         --  the right-hand side and an optional where clause.
         --  Note that there can be more than two arguments to a function declared
         --  infix, hence the list of pattern arguments.
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A single constructor declaration within a data type declaration,
 --   which may have an existential quantification binding.
@@ -508,7 +508,7 @@ data QualConDecl l
     = QualConDecl l
         {-forall-} (Maybe [TyVarBind l]) {- . -} (Maybe (Context l))
         {- => -} (ConDecl l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Declaration of an ordinary data constructor.
 data ConDecl l
@@ -518,11 +518,11 @@ data ConDecl l
                 -- ^ infix data constructor
      | RecDecl l (Name l) [FieldDecl l]
                 -- ^ record constructor
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Declaration of a (list of) named field(s).
 data FieldDecl l = FieldDecl l [Name l] (Type l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 
 -- | A single constructor declaration in a GADT data type declaration.
@@ -544,7 +544,7 @@ data FieldDecl l = FieldDecl l [Name l] (Type l)
 -- type (such as @Int -> Bool -> Ty@) is stored in the last 'Type' field.
 data GadtDecl l
     = GadtDecl l (Name l) (Maybe [FieldDecl l]) (Type l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Declarations inside a class declaration.
 data ClassDecl l
@@ -558,7 +558,7 @@ data ClassDecl l
             -- ^ default choice for an associated type synonym
     | ClsDefSig  l (Name l) (Type l)
             -- ^ default signature
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Declarations inside an instance declaration.
 data InstDecl l
@@ -570,7 +570,7 @@ data InstDecl l
             -- ^ an associated data type implementation
     | InsGData  l (DataOrNew l) (Type l) (Maybe (Kind l)) [GadtDecl l] (Maybe (Deriving l))
             -- ^ an associated data type implemented using GADT style
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The type of a constructor argument or field, optionally including
 --   a strictness annotation.
@@ -578,13 +578,13 @@ data BangType l
      = BangedTy   l -- ^ strict component, marked with \"@!@\"
      | LazyTy     l -- ^ lazy component, marked with \"@~@\"
      | NoStrictAnnot l -- ^ No strictness information
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 data Unpackedness l
     = Unpack l -- ^ \"@{-\# UNPACK \#-}@\"
     | NoUnpack l -- ^ \"@{-\# NOUNPACK \#-}@\"
     | NoUnpackPragma l -- ^ No unpack pragma
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The right hand side of a function binding, pattern binding, or a case
 --   alternative.
@@ -592,7 +592,7 @@ data Rhs l
      = UnGuardedRhs l (Exp l) -- ^ unguarded right hand side (/exp/)
      | GuardedRhss  l [GuardedRhs l]
                 -- ^ guarded right hand side (/gdrhs/)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A guarded right hand side @|@ /stmts/ @=@ /exp/, or @|@ /stmts/ @->@ /exp/
 --   for case alternatives.
@@ -600,7 +600,7 @@ data Rhs l
 --   otherwise it will be a single qualifier expression.
 data GuardedRhs l
      = GuardedRhs l [Stmt l] (Exp l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A type qualified with a context.
 --   An unqualified type has an empty context.
@@ -625,7 +625,7 @@ data Type l
      | TyBang l (BangType l) (Unpackedness l) (Type l)           -- ^ Strict type marked with \"@!@\" or type marked with UNPACK pragma.
      | TyWildCard l (Maybe (Name l))            -- ^ Either an anonymous of named type wildcard
      | TyQuasiQuote l String String             -- ^ @[$/name/| /string/ |]@
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Bools here are True if there was a leading quote which may be
 -- left out. For example @'[k1,k2]@ means the same thing as @[k1,k2]@.
@@ -636,7 +636,7 @@ data Promoted l
         | PromotedList l Bool [Type l]
         | PromotedTuple l [Type l]
         | PromotedUnit l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Flag denoting whether a tuple is boxed or unboxed.
 data Boxed = Boxed | Unboxed
@@ -646,7 +646,7 @@ data Boxed = Boxed | Unboxed
 data TyVarBind l
     = KindedVar   l (Name l) (Kind l)  -- ^ variable binding with kind annotation
     | UnkindedVar l (Name l)           -- ^ ordinary variable binding
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An explicit kind annotation.
 data Kind l
@@ -657,21 +657,21 @@ data Kind l
     | KindApp   l (Kind l) (Kind l)  -- ^ @k1 k2@
     | KindTuple l [Kind l]           -- ^ @'(k1,k2,k3)@, a promoted tuple
     | KindList  l (Kind l)           -- ^ @'[k1]@, a promoted list literal
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 
 -- | A functional dependency, given on the form
 --   l1 l2 ... ln -> r2 r3 .. rn
 data FunDep l
     = FunDep l [Name l] [Name l]
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A context is a set of assertions
 data Context l
     = CxSingle l (Asst l)
     | CxTuple  l [Asst l]
     | CxEmpty  l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Class assertions.
 --   In Haskell 98, the argument would be a /tyvar/, but this definition
@@ -685,7 +685,7 @@ data Asst l
         | EqualP l (Type l) (Type l)            -- ^ type equality constraint
         | ParenA l (Asst l)                     -- ^ parenthesised class assertion
         | WildCardA l (Maybe (Name l))          -- ^ Context Wildcard
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | /literal/
 -- Values of this type hold the abstract value of the literal, along with the
@@ -702,13 +702,13 @@ data Literal l
     | PrimDouble l Rational String     -- ^ unboxed double literal
     | PrimChar   l Char     String     -- ^ unboxed character literal
     | PrimString l String   String     -- ^ unboxed string literal
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An indication whether a literal pattern has been negated or not.
 data Sign l
     = Signless l
     | Negative l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Haskell expressions.
 data Exp l
@@ -792,18 +792,18 @@ data Exp l
 
 -- Holes
     | ExprHole l                            -- ^ Expression hole
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The name of an xml element or attribute,
 --   possibly qualified with a namespace.
 data XName l
     = XName l String              -- <name ...
     | XDomName l String String    -- <dom:name ...
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An xml attribute, which is a name-expression pair.
 data XAttr l = XAttr l (XName l) (Exp l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A template haskell bracket expression.
 data Bracket l
@@ -811,20 +811,20 @@ data Bracket l
     | PatBracket l (Pat l)        -- ^ pattern bracket: @[p| ... |]@
     | TypeBracket l (Type l)      -- ^ type bracket: @[t| ... |]@
     | DeclBracket l [Decl l]      -- ^ declaration bracket: @[d| ... |]@
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A template haskell splice expression
 data Splice l
     = IdSplice l String           -- ^ variable splice: @$var@
     | ParenSplice l (Exp l)       -- ^ parenthesised expression splice: @$(/exp/)@
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The safety of a foreign function call.
 data Safety l
     = PlayRisky l         -- ^ unsafe
     | PlaySafe l Bool     -- ^ safe ('False') or threadsafe ('True')
     | PlayInterruptible l -- ^ interruptible
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The calling convention of a foreign function call.
 data CallConv l
@@ -836,7 +836,7 @@ data CallConv l
     | Js l
     | JavaScript l
     | CApi l
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A top level options pragma, preceding the module header.
 data ModulePragma l
@@ -845,7 +845,7 @@ data ModulePragma l
                         -- ^ OPTIONS pragma, possibly qualified with a tool, e.g. OPTIONS_GHC
     | AnnModulePragma  l (Annotation l)
                         -- ^ ANN pragma with module scope
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Recognised tools for OPTIONS pragmas.
 data Tool = GHC | HUGS | NHC98 | YHC | HADDOCK | UnknownTool String
@@ -856,31 +856,31 @@ data Overlap l
     = NoOverlap l   -- ^ NO_OVERLAP pragma
     | Overlap l     -- ^ OVERLAP pragma
     | Incoherent l  -- ^ INCOHERENT pragma
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Activation clause of a RULES pragma.
 data Activation l
     = ActiveFrom   l Int
     | ActiveUntil  l Int
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | The body of a RULES pragma.
 data Rule l
     = Rule l String (Maybe (Activation l)) (Maybe [RuleVar l]) (Exp l) (Exp l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Variables used in a RULES pragma, optionally annotated with types
 data RuleVar l
     = RuleVar l (Name l)
     | TypedRuleVar l (Name l) (Type l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | Warning text to optionally use in the module header of e.g.
 --   a deprecated module.
 data WarningText l
     = DeprText l String
     | WarnText l String
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 
 -- | A pattern, to be matched against a value.
@@ -909,11 +909,11 @@ data Pat l
     | PXRPats  l [RPat l]                   -- ^ XML regular list pattern
     | PQuasiQuote l String String           -- ^ quasi quote pattern: @[$/name/| /string/ |]@
     | PBangPat l (Pat l)                    -- ^ strict (bang) pattern: @f !x = ...@
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An XML attribute in a pattern.
 data PXAttr l = PXAttr l (XName l) (Pat l)
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A regular pattern operator.
 data RPatOp l
@@ -923,7 +923,7 @@ data RPatOp l
     | RPPlusG l  -- ^ @+!@ = 1 or more, greedy
     | RPOpt   l  -- ^ @?@ = 0 or 1
     | RPOptG  l  -- ^ @?!@ = 0 or 1, greedy
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An entity in a regular pattern.
 data RPat l
@@ -935,14 +935,14 @@ data RPat l
     | RPAs l (Name l) (RPat l)     -- ^ linear variable binding, e.g. foo\@(1 | 2)
     | RPParen l (RPat l)           -- ^ parenthesised pattern, e.g. (2*)
     | RPPat l (Pat l)              -- ^ an ordinary pattern
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An /fpat/ in a labeled record pattern.
 data PatField l
     = PFieldPat l (QName l) (Pat l)     -- ^ ordinary label-pattern pair
     | PFieldPun l (QName l)             -- ^ record field pun
     | PFieldWildcard l                  -- ^ record field wildcard
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A statement, representing both a /stmt/ in a @do@-expression,
 --   an ordinary /qual/ in a list comprehension, as well as a /stmt/
@@ -956,7 +956,7 @@ data Stmt l
                             --   a guard expression
     | LetStmt l (Binds l)   -- ^ local bindings
     | RecStmt l [Stmt l]    -- ^ a recursive binding group for arrows
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | A general /transqual/ in a list comprehension,
 --   which could potentially be a transform of the kind
@@ -968,19 +968,19 @@ data QualStmt l
     | GroupBy      l (Exp l)          -- ^ @then@ @group@ @by@ /exp/
     | GroupUsing   l (Exp l)          -- ^ @then@ @group@ @using@ /exp/
     | GroupByUsing l (Exp l) (Exp l)  -- ^ @then@ @group@ @by@ /exp/ @using@ /exp/
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An /fbind/ in a labeled construction or update expression.
 data FieldUpdate l
     = FieldUpdate l (QName l) (Exp l)    -- ^ ordinary label-expresion pair
     | FieldPun l (QName l)               -- ^ record field pun
     | FieldWildcard l                    -- ^ record field wildcard
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -- | An /alt/ alternative in a @case@ expression.
 data Alt l
     = Alt l (Pat l) (Rhs l) (Maybe (Binds l))
-  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic)
+  deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 -----------------------------------------------------------------------------
 -- Builtin names.
