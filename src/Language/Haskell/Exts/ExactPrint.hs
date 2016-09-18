@@ -760,9 +760,9 @@ instance ExactP Decl where
       case srcInfoPoints l of
         [pat,sepPos] -> do
           let sep = case dir of
-                      ImplicitBidirectional     -> "="
+                      ImplicitBidirectional _   -> "="
                       ExplicitBidirectional _ _ -> "<-"
-                      Unidirectional            -> "<-"
+                      Unidirectional _          -> "<-"
           printStringAt (pos pat) "pattern"
           exactPC lhs
           printStringAt (pos sepPos) sep

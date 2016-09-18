@@ -1986,12 +1986,14 @@ Pattern Synonyms
 -- Glasgow extension: pattern synonyms
 >  pattern_synonym_decl :: { Decl L }
 >       : 'pattern' pattern_synonym_lhs '=' pat
->            { let l = nIS $1 <++> ann $4 <** [$1,$3]
->              in PatSyn l $2 $4 ImplicitBidirectional
+>            { let { l = nIS $1 <++> ann $4 <** [$1,$3] ;
+>                  dirl = nIS $3 }
+>              in PatSyn l $2 $4 (ImplicitBidirectional dirl)
 >                  }
 >       | 'pattern' pattern_synonym_lhs '<-' pat
->            {   let l = nIS $1 <++> ann $4 <** [$1,$3]
->                in PatSyn l $2 $4 Unidirectional
+>            {   let { l = nIS $1 <++> ann $4 <** [$1,$3] ;
+>                      dirl = nIS $3 }
+>                in PatSyn l $2 $4 (Unidirectional dirl)
 >            }
 >       | 'pattern' pattern_synonym_lhs '<-' pat where_decls
 >           {  let l = nIS $1 <++> ann $4 <** [$1, $3]

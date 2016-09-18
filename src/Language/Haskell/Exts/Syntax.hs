@@ -335,8 +335,8 @@ data Decl l
   deriving (Eq,Ord,Show,Typeable,Data,Foldable,Traversable,Functor,Generic,Generic1)
 
 data  PatternSynDirection l =
-      Unidirectional -- ^ A unidirectional pattern synonym with "<-"
-    | ImplicitBidirectional  -- ^ A bidirectional pattern synonym with "="
+      Unidirectional l -- ^ A unidirectional pattern synonym with "<-"
+    | ImplicitBidirectional l  -- ^ A bidirectional pattern synonym with "="
     | ExplicitBidirectional l [Decl l]  -- ^ A birectional pattern synonym with the construction specified.
     deriving (Eq, Ord, Show, Data, Typeable, Foldable, Traversable, Functor, Generic,Generic1)
 
